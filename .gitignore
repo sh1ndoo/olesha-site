@@ -1,0 +1,9 @@
+.vscode
+.idea
+docker-compose.yml
+backend/static/*
+backend/media/*
+__pycache__/
+*.log
+*.pot
+backend/backend/.env

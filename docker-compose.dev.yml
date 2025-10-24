@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    networks:
+      - django-nginx
+
+  backend:
+    container_name: backend
+    build: ./backend
+    command: /start_dev.sh
+    volumes:
+      - .:/code
+      - django-static:/backend/static
+    networks:
+      - django-nginx
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+    command: sh -c "npm rebuild esbuild && npm run dev"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - django-nginx
+    environment:
+      - NODE_ENV=development
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8000:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
+      - django-static:/usr/src/app/static
+    networks:
+      - django-nginx
+
+volumes:
+  django-static:
+
+networks:
+  django-nginx:
+    driver: bridge

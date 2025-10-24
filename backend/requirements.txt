@@ -1,0 +1,12 @@
+django
+psycopg2-binary
+djangorestframework
+pillow
+django-cors-headers
+djoser
+gunicorn
+environs
+django-imagekit
+pycountry
+babel
+django-storages[s3]
