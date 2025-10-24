@@ -1,0 +1,25 @@
+olesha.ifknow.ru {
+    # Устанавливаем максимальный размер тела запроса (аналог client_max_body_size)
+    request_body {
+        max_size 100m
+    }
+
+    # 1. Запросы к API и админ-панели Django отправляем на бэкенд
+    handle_path /api/* /admin/* {
+        reverse_proxy backend:8000
+    }
+
+    # 2. Запросы к /static/ отдаем из общего тома со статикой Django
+    handle_path /static/* {
+        root * /usr/src/app/static
+        file_server browse  # browse - аналог "autoindex on" в nginx
+    }
+
+    # 3. Все остальные запросы обрабатываем как фронтенд-приложение
+    handle {
+        root * /dist
+        # Если файл не найден, отдаем index.html (для роутинга в SPA)
+        try_files {path} {path}/ /index.html
+        file_server
+    }
+}

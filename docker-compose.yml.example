@@ -8,7 +8,7 @@ services:
     environment:
       - "DJANGO_DEBUG=False"
     networks:
-      - django-nginx
+      - app-network
     volumes:
       - .:/code
       - django-static:/backend/static
@@ -20,25 +20,30 @@ services:
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
     networks:
-      - django-nginx
+      - app-network
 
-  nginx:
-    build:
+  caddy:
+    build: # <-- ИЗМЕНЕНИЕ: Вместо 'image' используем 'build'
       context: .
-      dockerfile: nginx/Dockerfile
+      dockerfile: caddy/Dockerfile
+    restart: unless-stopped
     ports:
-      - 80:80
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
     networks:
-      - django-nginx
+      - app-network
     volumes:
-      - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
-      - django-static:/usr/src/app/static
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile      # Конфигурация Caddy
+      - django-static:/usr/src/app/static      # Статика Django
+      - caddy_data:/data                       # Сертификаты SSL
     depends_on:
       - backend
 
 volumes:
   django-static:
+  caddy_data: {}
 
 networks:
-  django-nginx:
+  app-network:
     driver: bridge

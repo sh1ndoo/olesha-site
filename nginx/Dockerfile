@@ -1,5 +1,5 @@
 # dev
-FROM node:16.13.0-alpine3.11 as build-stage
+FROM node:20.19-alpine as build-stage
 WORKDIR /app/
 COPY frontend/package.json /app/
 RUN npm cache verify
