@@ -399,6 +399,15 @@ const formatLength = (minutes) => {
 
 .positive { color: #4CAF50; }
 .negative { color: #F44336; }
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2,minmax(100px,1fr));
+  }
+  .extra-stats {
+    width: 100%;
+  }
+}
 </style>
 
 

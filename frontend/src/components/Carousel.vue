@@ -193,4 +193,18 @@ export default {
   height: 250px;
 }
 
+@media (max-width: 768px) {
+  .carousel-control {
+    font-size: 3rem;
+  }
+  .item-content p {
+    font-size: 0.9em;
+  }
+  .next {
+    right: -30px
+  }
+  .prev {
+    left: -30px
+  }
+}
 </style>
