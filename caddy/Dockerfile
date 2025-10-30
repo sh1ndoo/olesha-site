@@ -1,7 +1,8 @@
 # Этап 1: Сборка фронтенда (остается без изменений)
-FROM node:20-alpine as build-stage
+FROM node:20.19-alpine as build-stage
 WORKDIR /app/
 COPY frontend/package.json /app/
+RUN npm cache verify
 RUN npm install
 COPY frontend /app/
 RUN npm run build

@@ -43,6 +43,7 @@ function toggleTheme() {
   --text-thirdy-color: #7f7f7f;
   --border-radius-sm: 8px;
   --border-radius-md: 12px;
+  --border-radius-lg: 16px;
   --twitch-color: #9146FF;
   --youtube-color: #FF0000;
   --telegram-color: #2AABEE;

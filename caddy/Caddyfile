@@ -5,8 +5,22 @@ olesha.ifknow.ru {
     }
 
     # 1. Запросы к API и админ-панели Django отправляем на бэкенд
-    handle_path /api/* /admin/* {
-        reverse_proxy backend:8000
+    handle /api/* {
+        reverse_proxy backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_ip}
+            header_up X-Forwarded-For {remote_ip}
+            header_up X-Forwarded-Proto {scheme}
+        }
+    }
+
+    handle /admin/* {
+        reverse_proxy backend:8000 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_ip}
+            header_up X-Forwarded-For {remote_ip}
+            header_up X-Forwarded-Proto {scheme}
+        }
     }
 
     # 2. Запросы к /static/ отдаем из общего тома со статикой Django

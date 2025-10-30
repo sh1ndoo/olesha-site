@@ -521,6 +521,7 @@ const averageGuessedAmount = computed(() => {
 
 .toxicity-tooltip p {
   margin: 0 0 8px 0;
+  height: 20em;
 }
 .toxicity-tooltip p:last-child {
   margin-bottom: 0;

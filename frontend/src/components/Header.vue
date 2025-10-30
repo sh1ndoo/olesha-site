@@ -14,6 +14,7 @@
             <router-link to="/rules">Правила</router-link>
             <router-link to="/games">Игры</router-link>
             <router-link to="/scrandle">Scran</router-link>
+            <router-link to="/streamle">Streamle</router-link>
             <router-link to="/list">Аукционы</router-link>
             <router-link to="/art">Искусство</router-link>
             <!--            <a href="#">Смайлы</a>-->

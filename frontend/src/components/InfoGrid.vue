@@ -72,6 +72,13 @@ const cards = ref([
     href: '/scrandle',
     description: 'Открыт прием заявок',
     color: 'rgba(255,206,118,0.2)',
+  },
+  {
+    icon: '/images/streamle.avif',
+    title: 'Streamle',
+    href: '/streamle',
+    description: 'Попробуй угадать средний онлайн на стриме',
+    color: 'rgba(253,152,37,0.2)',
   }
 ]);
 </script>

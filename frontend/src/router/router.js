@@ -12,6 +12,7 @@ import Scrandle from "@/pages/Scrandle.vue";
 import ScrandleMenu from "@/pages/ScrandleMenu.vue";
 import ScrandleVote from "@/pages/ScrandleVote.vue";
 import Profile from "@/pages/Profile.vue";
+import Streamle from "@/pages/Streamle.vue";
 const routes = [
     {
         path: '/',
@@ -56,6 +57,10 @@ const routes = [
     {
         path: '/profile',
         component: Profile
+    },
+    {
+        path: '/streamle',
+        component: Streamle
     }
 ]
 

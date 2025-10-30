@@ -48,7 +48,7 @@
   <div class="row-inputs">
     <div class="form-group half-width">
       <label for="scran-place">Место (город, место)</label>
-      <input type="text" id="scran-place" v-model="scranData.place" required placeholder="Напр. Москва, ВТБ Арена" />
+      <input type="text" id="scran-place" v-model="scranData.place" required placeholder="Напр. Москва, Вкусочка" />
     </div>
 
     <div class="form-group half-width">
@@ -72,7 +72,7 @@
     </div>
 
     <div class="form-group half-width">
-      <label for="scran-price">Цена (₽)</label>
+      <label for="scran-price">Цена покупки/приготовления (₽)</label>
       <input type="number" id="scran-price" v-model="scranData.price" required placeholder="200.00" />
     </div>
   </div>
@@ -80,7 +80,7 @@
   <!-- Кнопки управления -->
   <div class="form-actions">
     <button type="button" class="btn btn-cancel" @click="$emit('close')">Назад</button>
-    <button type="submit" class="btn btn-submit">Отправить</button>
+    <button type="submit" class="btn btn-submit" :disabled="isSubmitting">{{ isSubmitting ? 'Отправка...' : 'Отправить' }}</button>
   </div>
 </form>
 </div>
@@ -112,12 +112,13 @@ const imagePreviewUrl = ref(null);
 // Ref для хранения списка всех доступных тегов
 const availableTags = ref([]);
 const availableCountries = ref([]);
+const isSubmitting = ref(false); // <-- ВОТ ЭТА СТРОКА
 // --- ИЗМЕНЕНИЯ В SCRIPT ---
 
 // Функция для загрузки тегов с сервера
 const fetchTags = () => {
   // Замените URL на ваш эндпоинт для получения тегов
-  axios.get('http://127.0.0.1:8000/api/v1/tags/')
+  axios.get('/api/v1/tags/')
   .then(response => {
     // Предполагается, что сервер возвращает массив объектов вида { id: 1, name: 'Бургеры' }
     availableTags.value = response.data;
@@ -129,7 +130,7 @@ const fetchTags = () => {
 
 const fetchCountries = () => {
   // Замените URL на ваш эндпоинт для получения тегов
-  axios.get('http://127.0.0.1:8000/api/v1/countries/')
+  axios.get('/api/v1/countries/')
   .then(response => {
     // Предполагается, что сервер возвращает массив объектов вида { id: 1, name: 'Бургеры' }
     availableCountries.value = response.data;
@@ -158,8 +159,14 @@ const handleFileUpload = (event) => {
 };
 
 const handleSubmit = () => {
+  if (isSubmitting.value) {
+    return;
+  }
+  isSubmitting.value = true;
+
   if (!scranData.imageFile) {
     alert('Пожалуйста, загрузите фото вашего скрана.');
+    isSubmitting.value = false; // <-- Не забываем выключить, если валидация не прошла
     return;
   }
 
@@ -183,7 +190,7 @@ const handleSubmit = () => {
     });
   }
 
-  axios.post('http://127.0.0.1:8000/api/v1/scran/', formData, {
+  axios.post('/api/v1/scran/', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }
@@ -197,6 +204,9 @@ const handleSubmit = () => {
   .catch(error => {
     console.error('Ошибка при отправке данных:', error);
     alert('Произошла ошибка при отправке данных.');
+  })
+  .finally(() => {
+    isSubmitting.value = false; // <-- ВЫКЛЮЧАЕМ СОСТОЯНИЕ ЗДЕСЬ
   });
 };
 </script>
@@ -236,7 +246,7 @@ margin-bottom: 15px;
 label {
 display: block;
 margin-bottom: 5px;
-font-weight: bold;
+font-weight: 600;
 font-size: 0.9em;
 color: #ccc;
 }
@@ -430,6 +440,86 @@ input[type=number]::-webkit-outer-spin-button {
 /* Для Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.btn:disabled {
+  opacity: 0.6; /* Делаем кнопку полупрозрачной */
+  cursor: not-allowed; /* Меняем курсор, показывая, что нажать нельзя */
+}
+
+.btn:disabled:hover {
+  opacity: 0.6; /* Убираем эффект наведения для заблокированной кнопки */
+}
+
+
+/* --- Стили для мобильной адаптации --- */
+
+/* Мы будем использовать breakpoint в 768px. Все что меньше, будет считаться мобильным устройством. */
+@media (max-width: 768px) {
+  .submit-scran-container {
+    /* Убираем выравнивание по центру, чтобы форма заняла всю доступную высоту */
+    align-items: flex-start;
+    height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .scran-form-card {
+    /* Увеличиваем ширину формы и уменьшаем отступы для мобильных экранов */
+    width: 95%;
+    padding: 20px;
+  }
+
+  .form-title {
+    /* Немного уменьшаем заголовок для экономии места */
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .row-inputs {
+    /* Заставляем элементы внутри этого блока переноситься на новую строку */
+    flex-direction: column;
+    gap: 0; /* Убираем промежуток, так как отступы теперь у .form-group */
+  }
+
+  .form-group.half-width {
+    /* Теперь элементы занимают всю ширину, а не половину */
+    width: 100%;
+  }
+
+  .form-actions {
+    /* Кнопки теперь будут одна под другой для удобства нажатия */
+    flex-direction: column;
+    gap: 15px; /* Добавляем отступ между кнопками */
+  }
+
+  .btn {
+    /* Делаем кнопки крупнее для удобства нажатия пальцем */
+    padding: 15px;
+    font-size: 1.1em;
+    width: 100%; /* Растягиваем кнопки на всю ширину */
+  }
+
+  .image-preview {
+    /* Уменьшаем высоту превью изображения */
+    height: 150px;
+  }
+}
+
+/* Дополнительные стили для очень маленьких экранов (например, iPhone 5/SE) */
+@media (max-width: 360px) {
+  .scran-form-card {
+    padding: 15px;
+  }
+
+  .form-title {
+    font-size: 1.3em;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    padding: 10px;
+  }
 }
 </style>
 

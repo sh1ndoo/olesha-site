@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Apps
     'scrandle',
+    'streamle'
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -64,8 +65,13 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
     "http://0.0.0.0:8080",
-    'http://localhost:8000'
+    'http://localhost:8000',
+    'https://olesha.ifknow.ru',
+    'https://www.olesha.ifknow.ru'
 ]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -189,3 +195,27 @@ STORAGES = {
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',  # Можно поставить 'INFO' для менее подробного вывода
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG', # Выводим всю отладочную информацию от Django
+            'propagate': True,
+        },
+    },
+}
