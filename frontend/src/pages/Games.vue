@@ -17,6 +17,24 @@ const largeCards = ref([
     title: 'UterUp',
     description: ''
   },
+  {
+    href: 'https://redditmoreless.nekittop4ik.space',
+    image: '/images/reddit_game.png',
+    title: 'RedditMoreLess',
+    description: ''
+  },
+  {
+    href: 'http://147.45.48.86:5000',
+    image: '/images/tablerino.png',
+    title: 'Tablerino',
+    description: ''
+  },
+  {
+    href: 'https://emodle.tiiny.site',
+    image: '/images/emodle.png',
+    title: 'Emodle',
+    description: ''
+  },
 ]);
 </script>
 
